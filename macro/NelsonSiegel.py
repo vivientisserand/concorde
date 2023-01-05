@@ -7,8 +7,20 @@ plt.style.use('ggplot')
 
 class NelsonSiegel:
     def __init__(self, yields, dates):
+        """
+        The Nelson-Siegel model is a comprehensive class of functions with learnable parameters
+        able to capture the different behaviours of the market term-structure.
+        Finding optimal parameters is done through mean-squares minimization between observed and
+        predicted yields. It appeared that the Nelder-Mead heuristics gave better - essentially in 
+        terms of stability - results than classic gradient descent.
+        
+        Parameters:
+            yields: a list of floats giving the observed yields on the market,
+            dates: a list of date string (format year-month-day) associated with the previous yields.
+        """
         self.yields = yields
         self.dates = [datetime.strptime(d, '%Y-%m-%d') for d in dates]
+        assert len(self.yields)==len(self.dates), "The yield and date lists do not have the same length."
         
     def compute_ns_value(self, lamb, beta_0, beta_1, beta_2, date):
         """From the original paper."""
